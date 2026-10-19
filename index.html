@@ -481,38 +481,77 @@ const meteors = [];
 const dust = [];
 const ripples = [];
 
-// Authentic Libra Constellation (The Scales) stars & connections
-// Positioned in the upper-left / center-left sky to balance the 3D Moon on the right
+// Justice Scale (Libra) Star Constellation — unmistakable Balance Scale geometry
+// group: 'pillar' (static center), 'beam' (tilts around fulcrum), 'leftPan' (hangs from left tip), 'rightPan' (hangs from right tip)
 const libraStars = [
-  { id: 'beta',    name: 'Zubeneschamali (β)', nx: 0.46, ny: 0.08, r: 3.4, color: '#e0f7fa', glow: '165, 243, 252', main: true },
-  { id: 'alpha',   name: 'Zubenelgenubi (α)',  nx: 0.14, ny: 0.42, r: 3.3, color: '#fff8e7', glow: '253, 230, 138', main: true },
-  { id: 'gamma',   name: 'Zubenelhakrabi (γ)', nx: 0.78, ny: 0.36, r: 2.9, color: '#fef3c7', glow: '252, 211, 77',  main: true },
-  { id: 'iota',    name: 'ι Librae',           nx: 0.52, ny: 0.54, r: 2.2, color: '#e0e7ff', glow: '199, 210, 254', main: false },
-  { id: 'sigma',   name: 'Brachium (σ)',       nx: 0.24, ny: 0.86, r: 2.8, color: '#ffedd5', glow: '253, 186, 116', main: true },
-  { id: 'upsilon', name: 'υ Librae',           nx: 0.72, ny: 0.74, r: 2.3, color: '#fef3c7', glow: '252, 211, 77',  main: false },
-  { id: 'tau',     name: 'τ Librae',           nx: 0.64, ny: 0.92, r: 2.2, color: '#e0f2fe', glow: '186, 230, 253', main: false },
-  { id: 'theta',   name: 'θ Librae',           nx: 0.94, ny: 0.24, r: 2.0, color: '#f3e8ff', glow: '216, 180, 254', main: false }
+  // Central Crown, Fulcrum, Pillar & Pedestal Base
+  { nx: 0.50, ny: 0.05, r: 3.1, color: '#fff8e7', glow: '253, 230, 138', main: true,  group: 'pillar' },   // 0: Crown apex
+  { nx: 0.50, ny: 0.22, r: 3.5, color: '#e0f7fa', glow: '165, 243, 252', main: true,  group: 'pillar' },   // 1: Central fulcrum pivot
+  { nx: 0.50, ny: 0.55, r: 2.3, color: '#e0e7ff', glow: '199, 210, 254', main: false, group: 'pillar' },   // 2: Pillar mid
+  { nx: 0.50, ny: 0.84, r: 2.7, color: '#fef3c7', glow: '252, 211, 77',  main: true,  group: 'pillar' },   // 3: Pillar base center
+  { nx: 0.32, ny: 0.93, r: 2.4, color: '#ffedd5', glow: '253, 186, 116', main: false, group: 'pillar' },   // 4: Pedestal left foot
+  { nx: 0.68, ny: 0.93, r: 2.4, color: '#ffedd5', glow: '253, 186, 116', main: false, group: 'pillar' },   // 5: Pedestal right foot
+
+  // Balance Crossbeam
+  { nx: 0.29, ny: 0.19, r: 2.5, color: '#e0f2fe', glow: '186, 230, 253', main: false, group: 'beam' },     // 6: Left inner beam
+  { nx: 0.11, ny: 0.25, r: 3.2, color: '#fff8e7', glow: '253, 230, 138', main: true,  group: 'beam' },     // 7: Left outer beam tip
+  { nx: 0.71, ny: 0.19, r: 2.5, color: '#e0f2fe', glow: '186, 230, 253', main: false, group: 'beam' },     // 8: Right inner beam
+  { nx: 0.89, ny: 0.25, r: 3.2, color: '#fff8e7', glow: '253, 230, 138', main: true,  group: 'beam' },     // 9: Right outer beam tip
+
+  // Left Hanging Scale Pan (Chains + Bowl)
+  { nx: 0.00, ny: 0.60, r: 2.5, color: '#fef3c7', glow: '252, 211, 77',  main: false, group: 'leftPan' },  // 10: Left pan left rim
+  { nx: 0.11, ny: 0.70, r: 2.9, color: '#e0f7fa', glow: '165, 243, 252', main: true,  group: 'leftPan' },  // 11: Left pan bowl bottom
+  { nx: 0.22, ny: 0.60, r: 2.5, color: '#fef3c7', glow: '252, 211, 77',  main: false, group: 'leftPan' },  // 12: Left pan right rim
+
+  // Right Hanging Scale Pan (Chains + Bowl)
+  { nx: 0.78, ny: 0.60, r: 2.5, color: '#fef3c7', glow: '252, 211, 77',  main: false, group: 'rightPan' }, // 13: Right pan left rim
+  { nx: 0.89, ny: 0.70, r: 2.9, color: '#e0f7fa', glow: '165, 243, 252', main: true,  group: 'rightPan' }, // 14: Right pan bowl bottom
+  { nx: 1.00, ny: 0.60, r: 2.5, color: '#fef3c7', glow: '252, 211, 77',  main: false, group: 'rightPan' }  // 15: Right pan right rim
 ];
 
-// Constellation lines [fromIndex, toIndex, revealOrder, primaryBeam]
+// Constellation lines [fromIndex, toIndex, revealDelay, isPrimaryBeam]
 const libraEdges = [
-  [0, 1, 0.0, true],   // β -> α (West scale beam)
-  [0, 2, 0.3, true],   // β -> γ (East scale beam)
-  [1, 2, 0.6, true],   // α -> γ (Crossbar of the Scales)
-  [1, 3, 0.9, false],  // α -> ι (Inner diamond left)
-  [2, 3, 1.1, false],  // γ -> ι (Inner diamond right)
-  [1, 4, 1.4, true],   // α -> σ (West hanging scale pan)
-  [2, 5, 1.7, true],   // γ -> υ (East hanging scale pan upper)
-  [5, 6, 2.0, true],   // υ -> τ (East hanging scale pan lower)
-  [2, 7, 2.2, false]   // γ -> θ (Eastern tip)
+  // Crown & Fulcrum
+  [0, 1, 0.0, true],   // Crown apex -> Fulcrum
+  [0, 6, 0.2, false],  // Crown apex -> Left inner beam brace
+  [0, 8, 0.2, false],  // Crown apex -> Right inner beam brace
+
+  // Balance Beam Arms
+  [1, 6, 0.35, true],  // Fulcrum -> Left inner beam
+  [6, 7, 0.55, true],  // Left inner beam -> Left outer beam tip
+  [1, 8, 0.35, true],  // Fulcrum -> Right inner beam
+  [8, 9, 0.55, true],  // Right inner beam -> Right outer beam tip
+
+  // Central Pillar & Pedestal Base
+  [1, 2, 0.45, true],  // Fulcrum -> Pillar mid
+  [2, 3, 0.70, true],  // Pillar mid -> Pillar base center
+  [3, 4, 0.95, true],  // Pillar base -> Left pedestal foot
+  [3, 5, 0.95, true],  // Pillar base -> Right pedestal foot
+  [4, 5, 1.10, true],  // Pedestal base bottom line
+  [2, 4, 1.15, false], // Left pedestal brace
+  [2, 5, 1.15, false], // Right pedestal brace
+
+  // Left Scale Chains & Pan
+  [7, 10, 0.85, false], // Left tip -> Left pan left rim (chain)
+  [7, 12, 0.85, false], // Left tip -> Left pan right rim (chain)
+  [10, 12, 1.20, true], // Left pan top rim
+  [10, 11, 1.35, true], // Left pan bowl left curve
+  [11, 12, 1.35, true], // Left pan bowl right curve
+
+  // Right Scale Chains & Pan
+  [9, 13, 0.85, false], // Right tip -> Right pan left rim (chain)
+  [9, 15, 0.85, false], // Right tip -> Right pan right rim (chain)
+  [13, 15, 1.20, true], // Right pan top rim
+  [13, 14, 1.35, true], // Right pan bowl left curve
+  [14, 15, 1.35, true]  // Right pan bowl right curve
 ];
 
 function getLibraBounds() {
   const isMobile = W < 600;
-  const boxW = isMobile ? Math.min(W * 0.56, 210) : Math.min(W * 0.32, 310);
-  const boxH = boxW * 0.76;
-  const startX = isMobile ? W * 0.07 : Math.max(48, W * 0.10);
-  const startY = isMobile ? H * 0.065 : Math.max(44, H * 0.08);
+  const boxW = isMobile ? Math.min(W * 0.54, 200) : Math.min(W * 0.30, 290);
+  const boxH = boxW * 0.84;
+  const startX = isMobile ? W * 0.06 : Math.max(48, W * 0.09);
+  const startY = isMobile ? H * 0.055 : Math.max(40, H * 0.07);
   return { startX, startY, boxW, boxH };
 }
 
@@ -609,18 +648,55 @@ function drawLibraConstellation(mx, my) {
   const parX = -mx * 14;
   const parY = -my * 10;
 
-  // Compute screen coordinates for each star in Libra
-  const pts = libraStars.map((s, idx) => {
-    const floatX = Math.sin(t * 0.9 + idx * 1.3) * 1.8;
-    const floatY = Math.cos(t * 0.8 + idx * 1.1) * 1.8;
+  // Fulcrum screen position (star index 1)
+  const pivX = startX + libraStars[1].nx * boxW + parX;
+  const pivY = startY + libraStars[1].ny * boxH + parY;
+
+  // Gentle balancing tilt of the Justice Scale beam + interactive pointer influence
+  const swayAngle = Math.sin(t * 0.75) * 0.055 + mx * 0.035;
+  const cosA = Math.cos(swayAngle);
+  const sinA = Math.sin(swayAngle);
+
+  function rotateAroundFulcrum(x, y) {
+    const dx = x - pivX;
+    const dy = y - pivY;
     return {
-      ...s,
-      x: startX + s.nx * boxW + parX + floatX,
-      y: startY + s.ny * boxH + parY + floatY
+      x: pivX + dx * cosA - dy * sinA,
+      y: pivY + dx * sinA + dy * cosA
     };
+  }
+
+  // Compute screen coordinates for Left & Right beam tips so the pans hang vertically from them
+  const leftTipBaseX = startX + libraStars[7].nx * boxW + parX;
+  const leftTipBaseY = startY + libraStars[7].ny * boxH + parY;
+  const leftTipRot = rotateAroundFulcrum(leftTipBaseX, leftTipBaseY);
+  const leftPanOffsetX = leftTipRot.x - leftTipBaseX;
+  const leftPanOffsetY = leftTipRot.y - leftTipBaseY;
+
+  const rightTipBaseX = startX + libraStars[9].nx * boxW + parX;
+  const rightTipBaseY = startY + libraStars[9].ny * boxH + parY;
+  const rightTipRot = rotateAroundFulcrum(rightTipBaseX, rightTipBaseY);
+  const rightPanOffsetX = rightTipRot.x - rightTipBaseX;
+  const rightPanOffsetY = rightTipRot.y - rightTipBaseY;
+
+  const pts = libraStars.map((s) => {
+    let x = startX + s.nx * boxW + parX;
+    let y = startY + s.ny * boxH + parY;
+    if (s.group === 'beam') {
+      const rot = rotateAroundFulcrum(x, y);
+      x = rot.x;
+      y = rot.y;
+    } else if (s.group === 'leftPan') {
+      x += leftPanOffsetX;
+      y += leftPanOffsetY;
+    } else if (s.group === 'rightPan') {
+      x += rightPanOffsetX;
+      y += rightPanOffsetY;
+    }
+    return { ...s, x, y };
   });
 
-  // Check if pointer is hovering near the Libra constellation
+  // Check if pointer is hovering near the constellation
   const centerX = startX + boxW * 0.5 + parX;
   const centerY = startY + boxH * 0.5 + parY;
   const distToPointer = pointer.active ? Math.hypot(pointer.rawX - centerX, pointer.rawY - centerY) : 999;
@@ -630,7 +706,7 @@ function drawLibraConstellation(mx, my) {
 
   ctx.save();
 
-  // Subtle celestial aura behind Libra
+  // Subtle celestial aura behind the Justice Scale constellation
   const nebula = ctx.createRadialGradient(centerX, centerY, 5, centerX, centerY, boxW * 0.72);
   nebula.addColorStop(0, `rgba(147, 197, 253, ${(0.08 + hoverBoost * 0.08) * masterAlpha})`);
   nebula.addColorStop(0.5, `rgba(167, 139, 250, ${(0.045 + hoverBoost * 0.05) * masterAlpha})`);
@@ -646,19 +722,18 @@ function drawLibraConstellation(mx, my) {
     const p1 = pts[aIdx];
     const p2 = pts[bIdx];
 
-    // Smoothly trace in over the first few seconds
-    const progress = Math.min(1, Math.max(0, (t * 1.15 - delay) / 0.85));
+    const progress = Math.min(1, Math.max(0, (t * 1.15 - delay) / 0.75));
     if (progress <= 0) continue;
 
     const ex = p1.x + (p2.x - p1.x) * progress;
     const ey = p1.y + (p2.y - p1.y) * progress;
 
-    const baseLineAlpha = (isPrimary ? 0.52 : 0.28) + hoverBoost * 0.32;
+    const baseLineAlpha = (isPrimary ? 0.58 : 0.34) + hoverBoost * 0.32;
     const shimmer = 0.85 + 0.15 * Math.sin(t * 2.2 + i);
 
     // Outer soft glow line
     ctx.strokeStyle = `rgba(186, 230, 253, ${baseLineAlpha * 0.45 * shimmer * masterAlpha})`;
-    ctx.lineWidth = isPrimary ? 3.2 : 2.0;
+    ctx.lineWidth = isPrimary ? 3.0 : 1.8;
     ctx.lineCap = 'round';
     ctx.beginPath();
     ctx.moveTo(p1.x, p1.y);
@@ -668,7 +743,7 @@ function drawLibraConstellation(mx, my) {
     // Crisp inner astronomical line
     const lineGrad = ctx.createLinearGradient(p1.x, p1.y, p2.x, p2.y);
     lineGrad.addColorStop(0, `rgba(255, 248, 225, ${baseLineAlpha * shimmer * masterAlpha})`);
-    lineGrad.addColorStop(0.5, `rgba(165, 243, 252, ${baseLineAlpha * 0.85 * shimmer * masterAlpha})`);
+    lineGrad.addColorStop(0.5, `rgba(165, 243, 252, ${baseLineAlpha * 0.88 * shimmer * masterAlpha})`);
     lineGrad.addColorStop(1, `rgba(255, 248, 225, ${baseLineAlpha * shimmer * masterAlpha})`);
     ctx.strokeStyle = lineGrad;
     ctx.lineWidth = isPrimary ? 1.15 : 0.75;
@@ -677,32 +752,32 @@ function drawLibraConstellation(mx, my) {
     ctx.lineTo(ex, ey);
     ctx.stroke();
 
-    // Travelling starlight pulse along completed primary edges
+    // Travelling starlight pulse along primary scale edges
     if (progress >= 1 && isPrimary) {
-      const pulsePos = (t * 0.45 + i * 0.27) % 1;
+      const pulsePos = (t * 0.45 + i * 0.21) % 1;
       const px = p1.x + (p2.x - p1.x) * pulsePos;
       const py = p1.y + (p2.y - p1.y) * pulsePos;
-      const pg = ctx.createRadialGradient(px, py, 0, px, py, 6);
+      const pg = ctx.createRadialGradient(px, py, 0, px, py, 5.5);
       pg.addColorStop(0, `rgba(255, 253, 240, ${(0.55 + hoverBoost * 0.35) * masterAlpha})`);
       pg.addColorStop(1, 'rgba(255, 253, 240, 0)');
       ctx.fillStyle = pg;
       ctx.beginPath();
-      ctx.arc(px, py, 6, 0, Math.PI * 2);
+      ctx.arc(px, py, 5.5, 0, Math.PI * 2);
       ctx.fill();
     }
   }
 
-  // Draw each Libra star with halo, core, and diffraction spikes
+  // Draw each star in the Justice Scale with halo, core, and diffraction spikes
   for (let i = 0; i < pts.length; i++) {
     const s = pts[i];
-    const starAppear = Math.min(1, Math.max(0, (t * 1.3 - i * 0.18) / 0.6));
+    const starAppear = Math.min(1, Math.max(0, (t * 1.4 - i * 0.08) / 0.5));
     if (starAppear <= 0) continue;
 
-    const pulse = 0.82 + 0.18 * Math.sin(t * 2.8 + i * 1.7);
-    const radius = s.r * (0.9 + hoverBoost * 0.22) * pulse * starAppear;
+    const pulse = 0.84 + 0.16 * Math.sin(t * 2.8 + i * 1.5);
+    const radius = s.r * (0.9 + hoverBoost * 0.2) * pulse * starAppear;
 
     // Outer star halo
-    const haloR = radius * (s.main ? 6.5 : 4.5);
+    const haloR = radius * (s.main ? 6.2 : 4.2);
     const halo = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, haloR);
     halo.addColorStop(0, `rgba(${s.glow}, ${(0.55 + hoverBoost * 0.25) * starAppear * masterAlpha})`);
     halo.addColorStop(0.4, `rgba(${s.glow}, ${(0.18 + hoverBoost * 0.12) * starAppear * masterAlpha})`);
@@ -712,11 +787,11 @@ function drawLibraConstellation(mx, my) {
     ctx.arc(s.x, s.y, haloR, 0, Math.PI * 2);
     ctx.fill();
 
-    // 4-point celestial diffraction spikes on primary Libra stars
+    // 4-point celestial diffraction spikes on key scale stars
     if (s.main || hoverBoost > 0.2) {
-      const spikeLen = radius * (s.main ? 5.8 : 3.8) * (1 + hoverBoost * 0.35);
+      const spikeLen = radius * (s.main ? 5.4 : 3.6) * (1 + hoverBoost * 0.35);
       ctx.strokeStyle = `rgba(255, 252, 240, ${(0.62 + hoverBoost * 0.3) * pulse * starAppear * masterAlpha})`;
-      ctx.lineWidth = s.main ? 0.9 : 0.6;
+      ctx.lineWidth = s.main ? 0.85 : 0.55;
       ctx.beginPath();
       ctx.moveTo(s.x - spikeLen, s.y);
       ctx.lineTo(s.x + spikeLen, s.y);
@@ -724,8 +799,8 @@ function drawLibraConstellation(mx, my) {
       ctx.lineTo(s.x, s.y + spikeLen);
       ctx.stroke();
 
-      // Diagonal subtle spikes for brightest stars (β & α Librae)
-      if (i < 2) {
+      // Diagonal spikes on the Fulcrum & Crown stars
+      if (i <= 1) {
         const dLen = spikeLen * 0.45;
         ctx.strokeStyle = `rgba(255, 252, 240, ${0.35 * pulse * starAppear * masterAlpha})`;
         ctx.beginPath();
@@ -743,26 +818,6 @@ function drawLibraConstellation(mx, my) {
     ctx.beginPath();
     ctx.arc(s.x, s.y, radius, 0, Math.PI * 2);
     ctx.fill();
-  }
-
-  // Astronomical Label ("♎ LIBRA") softly glowing below/inside the constellation
-  const labelFade = Math.min(1, Math.max(0, (t - 1.4) / 1.2));
-  if (labelFade > 0) {
-    const lx = startX + boxW * 0.47 + parX;
-    const ly = startY + boxH * 1.05 + parY;
-    ctx.textAlign = 'center';
-    ctx.font = 'italic 500 13px "Cormorant Garamond", Georgia, serif';
-    ctx.fillStyle = `rgba(241, 231, 207, ${(0.48 + hoverBoost * 0.4) * labelFade * masterAlpha})`;
-    ctx.fillText('♎  L I B R A', lx, ly);
-
-    // Show star names subtly when hovering/touching near Libra
-    if (hoverBoost > 0.15 && !isLetterOpen) {
-      ctx.font = 'italic 11px "Cormorant Garamond", Georgia, serif';
-      ctx.fillStyle = `rgba(224, 242, 254, ${hoverBoost * 0.75})`;
-      ctx.fillText('Zubeneschamali', pts[0].x, pts[0].y - 12);
-      ctx.fillText('Zubenelgenubi', pts[1].x - 6, pts[1].y - 11);
-      ctx.fillText('Zubenelhakrabi', pts[2].x + 8, pts[2].y - 10);
-    }
   }
 
   ctx.restore();
