@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>For My Moonlight</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#0e1322;
+  --paper:#f3ead8;
+  --ink:#3b2f27;
+  --ink-soft:#7a6a5b;
+  --env:#e9dec7;
+  --env-dark:#d6c6a6;
+  --env-flap:#e0d2b6;
+  --seal:#7b1e2c;
+  --w:min(84vw,380px);
+  --h:calc(var(--w)*.64);
+  --lw:min(92vw,460px);
+  --lh:min(86vh,740px);
+  --ease:cubic-bezier(.65,0,.25,1);
+}
+@supports (height:1svh){ :root{ --lh:min(86svh,740px); } }
+
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden}
+body{
+  background:radial-gradient(130% 90% at 50% 0%,#232c48 0%,var(--night) 65%);
+  font-family:"Cormorant Garamond",Georgia,serif;
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* night sky */
+.sky{position:fixed;inset:0;pointer-events:none}
+.sky i{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:.15;animation:tw 4s ease-in-out infinite alternate}
+@keyframes tw{to{opacity:.7}}
+.moon{position:fixed;top:7%;right:14%;width:44px;height:44px;border-radius:50%;
+  box-shadow:11px 6px 0 0 #f1e7cf;filter:drop-shadow(0 0 18px rgba(241,231,207,.35));transform:rotate(-20deg);pointer-events:none}
+
+.scene{position:fixed;inset:0}
+
+/* envelope */
+.part{position:absolute;left:calc(50% - var(--w)/2);top:calc(50% - var(--h)/2);width:var(--w);height:var(--h);
+  transition:opacity .7s ease,translate .8s var(--ease)}
+.back{background:var(--env-dark);border-radius:6px;box-shadow:0 30px 60px -18px rgba(0,0,0,.65)}
+.front{z-index:3;background:var(--env);border-radius:6px;clip-path:polygon(0 0,50% 55%,100% 0,100% 100%,0 100%)}
+.front::after{content:"";position:absolute;inset:0;border-radius:6px;background:#efe5d0;clip-path:polygon(0 100%,50% 48%,100% 100%)}
+.flap{z-index:4;background:var(--env-flap);clip-path:polygon(0 0,100% 0,50% 62%);
+  transform-origin:top;transform:perspective(900px) rotateX(0);
+  transition:transform .75s var(--ease),z-index 0s .38s,opacity .7s ease,translate .8s var(--ease)}
+.seal{z-index:5;position:absolute;left:calc(50% - 22px);top:calc(50% - var(--h)/2 + var(--h)*.62 - 26px);
+  width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle at 35% 30%,#a33445,var(--seal) 60%,#5a1420);
+  box-shadow:0 2px 6px rgba(0,0,0,.35),inset 0 0 0 3px rgba(0,0,0,.12);
+  color:#e9c98f;font-size:20px;transition:opacity .35s ease,transform .35s ease}
+.to{z-index:3;display:flex;align-items:flex-end;justify-content:center;
+  padding-bottom:clamp(10px,5%,18px);text-align:center;white-space:nowrap;
+  font-family:"Mrs Saint Delafield",cursive;font-size:clamp(22px,6vw,32px);color:var(--ink-soft);
+  pointer-events:none;transition:opacity .5s ease}
+.hint{position:absolute;left:0;right:0;top:calc(50% + var(--h)/2 + 30px);text-align:center;
+  font-style:italic;font-size:15px;letter-spacing:.2em;text-transform:lowercase;color:rgba(241,231,207,.55);
+  animation:breathe 2.4s ease-in-out infinite;transition:opacity .4s}
+@keyframes breathe{50%{opacity:.35}}
+.open-btn{position:absolute;z-index:10;inset:0;width:100%;height:100%;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+
+/* letter */
+.letter{position:absolute;z-index:2;
+  left:calc(50% - var(--w)*.44);top:calc(50% - var(--h)/2 + var(--h)*.08);
+  width:calc(var(--w)*.88);height:calc(var(--h)*.86);
+  transition:transform 1s var(--ease),left 1s var(--ease),top 1s var(--ease),width 1s var(--ease),height 1s var(--ease)}
+.paper,.door{
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .33 0 0 0 0 .2 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse at center,transparent 55%,rgba(160,120,70,.16) 100%),
+    var(--paper)}
+.paper{position:absolute;inset:0;border-radius:3px;overflow:hidden;box-shadow:0 24px 50px -16px rgba(0,0,0,.6)}
+.paper::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:1px;
+  background:linear-gradient(transparent,rgba(120,90,60,.18) 15%,rgba(120,90,60,.18) 85%,transparent);opacity:0;transition:opacity 1s 1s}
+.door{position:absolute;z-index:2;top:0;bottom:0;width:50%;
+  transition:transform 1.2s var(--ease),opacity .5s ease .75s}
+.door.l{left:0;transform-origin:left center;box-shadow:inset -14px 0 18px -16px rgba(60,40,20,.45)}
+.door.r{right:0;transform-origin:right center;box-shadow:inset 14px 0 18px -16px rgba(60,40,20,.45)}
+.pin{position:absolute;z-index:3;left:50%;top:50%;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;
+  display:grid;place-items:center;font-size:13px;color:#e9c98f;background:var(--seal);box-shadow:0 1px 3px rgba(0,0,0,.3);
+  transition:opacity .3s,transform .3s}
+.content{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;-ms-overflow-style:none;
+  padding:40px clamp(22px,7vw,40px) 56px;opacity:0;transition:opacity 1.2s ease .6s;
+  font-size:clamp(17px,4.6vw,19.5px);line-height:1.65}
+.content::-webkit-scrollbar{display:none}
+.content p{margin:0 0 1.05em}
+.age{text-align:right;font-style:italic;font-size:.85em;color:var(--ink-soft);letter-spacing:.08em;margin-bottom:.4em!important}
+.script{font-family:"Mrs Saint Delafield",cursive;font-weight:400;line-height:1.1;color:var(--ink)}
+h1.script{font-size:clamp(40px,11vw,52px);margin:.1em 0 .45em}
+.sign{margin-top:1.8em!important}
+.sign .script{display:block;font-size:clamp(36px,10vw,46px);margin-top:.1em}
+.small{font-style:italic;color:var(--ink-soft);font-size:.9em}
+
+/* sequence */
+.open .seal{opacity:0;transform:scale(.6)}
+.open .hint,.open .to{opacity:0}
+.open .flap{transform:perspective(900px) rotateX(180deg);z-index:1}
+.pull .letter{transform:translateY(calc(var(--h)*-.9))}
+.out .letter{z-index:6}
+.out .part{opacity:0;translate:0 70px}
+.expand .letter{left:calc(50% - var(--lw)/2);top:calc(50% - var(--lh)/2);width:var(--lw);height:var(--lh);transform:none}
+.unfold .pin{opacity:0;transform:scale(.5)}
+.unfold .door{pointer-events:none;opacity:0}
+.unfold .door.l{transform:perspective(1600px) rotateY(-115deg)}
+.unfold .door.r{transform:perspective(1600px) rotateY(115deg)}
+.unfold .content{opacity:1}
+.unfold .paper::before{opacity:1}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.01s!important;transition-delay:0s!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+<div class="sky" aria-hidden="true"></div>
+<div class="moon" aria-hidden="true"></div>
+
+<main class="scene">
+  <div class="part back"></div>
+
+  <article class="letter">
+    <div class="paper">
+      <div class="content">
+        <p class="age">twenty-two</p>
+        <h1 class="script">Happy birthday, my moonlight</h1>
+
+        <p>I started this letter more times than I want to admit. Everything I wrote sounded either too big or too small, and none of it sounded like us. So I'm just going to talk to you the way I do at 2am when neither of us wants to hang up.</p>
+
+        <p>Twenty-two. I hope you know how proud I am of you. Of the things people can see, sure, but mostly of the stuff nobody claps for. The days you were exhausted and kept going anyway. The times you doubted yourself and still showed up. I saw those. I always see those.</p>
+
+        <p>This year I want something for you that I can't give you myself. I want you to be proud of <em>you</em>. I want you to look at yourself the way I look at you, even just once, and finally get why I can't stop going on about you. Grow as much as you want. Change if you need to. Go after the things that scare you a little. I'm not going anywhere. I'll be right there holding your bag and cheering way too loud.</p>
+
+        <p>I also know I'm not the perfect partner. I mess up. I say the wrong thing, or I don't say the right thing when you need it most. There have been times I made you feel like you weren't loved the way you wanted to be, and I hate that I did that. I'm not writing this to make excuses. I just want you to know I notice, and I'm trying. Every day I'm trying to get better at loving you the way you actually need, not just the way I know how.</p>
+
+        <p>Because you're worth learning. The soft parts, the moody parts, the way you go quiet when something's wrong and think I won't catch it. I want to keep learning you for a really long time.</p>
+
+        <p>So here's my promise for 22: I'll keep choosing you. On the easy days and the messy ones. I'll keep listening, keep trying, and keep being your biggest fan even on the days you don't feel like much.</p>
+
+        <p>You make my nights brighter in a way I still can't explain properly. That's why you're my moonlight. That part isn't changing.</p>
+
+        <p>Happy birthday, baby. Go be proud of yourself. You've more than earned it.</p>
+
+        <p class="sign">Yours, always
+          <span class="script">to infinity and beyond</span>
+        </p>
+      </div>
+      <div class="door l"></div>
+      <div class="door r"></div>
+      <div class="pin" aria-hidden="true">☾</div>
+    </div>
+  </article>
+
+  <div class="part front"></div>
+  <div class="part to" aria-hidden="true">my moonlight</div>
+  <div class="part flap"></div>
+  <div class="part seal" aria-hidden="true">☾</div>
+  <p class="hint" aria-hidden="true">tap to open</p>
+  <button class="open-btn" aria-label="Open the letter"></button>
+</main>
+
+<script>
+const sky = document.querySelector('.sky');
+for (let i = 0; i < 40; i++) {
+  const s = document.createElement('i');
+  s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*4}s`;
+  sky.appendChild(s);
+}
+
+const scene = document.querySelector('.scene');
+const wait = ms => new Promise(r => setTimeout(r, ms));
+document.querySelector('.open-btn').addEventListener('click', async e => {
+  e.currentTarget.remove();
+  for (const [cls, ms] of [['open', 800], ['pull', 1050], ['out', 450], ['expand', 1050], ['unfold', 0]]) {
+    scene.classList.add(cls);
+    await wait(ms);
+  }
+});
+</script>
+</body>
+</html>
